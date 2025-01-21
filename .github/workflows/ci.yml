@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          export BUN_INSTALL="$HOME/.bun"
+          echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
+          echo "$BUN_INSTALL/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          npm install -g node-gyp
+          bun install
+
+      - name: Lint, Test & Build
+        env:
+          SAFE_SALT_NONCE: "0"
+        run: |
+          bun lint
+          bun test
+          bun build:next
