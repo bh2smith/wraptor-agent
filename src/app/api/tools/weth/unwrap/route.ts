@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { formatUnits } from "viem";
-import {
-  signRequestFor,
-  unwrapMetaTransaction,
-} from "@bitteprotocol/agent-sdk";
+import { signRequestFor, unwrapMetaTransaction } from "@bitte-ai/agent-sdk";
 import { validateWethInput } from "../../util";
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const search = req.nextUrl.searchParams;

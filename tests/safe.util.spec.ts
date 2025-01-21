@@ -1,6 +1,6 @@
 // util.test.ts
 import { zeroAddress } from "viem";
-import { signRequestFor } from "@bitteprotocol/agent-sdk";
+import { signRequestFor } from "@bitte-ai/agent-sdk";
 
 describe("signRequestFor", () => {
   it("Null Tx", () => {

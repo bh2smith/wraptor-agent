@@ -4,7 +4,7 @@ import {
   floatField,
   numberField,
   validateInput,
-} from "@bitteprotocol/agent-sdk";
+} from "@bitte-ai/agent-sdk";
 import { Network, type MetaTransaction } from "near-safe";
 import {
   type Address,
