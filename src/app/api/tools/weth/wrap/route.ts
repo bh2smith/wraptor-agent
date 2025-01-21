@@ -1,4 +1,4 @@
-import { signRequestFor, wrapMetaTransaction } from "@bitteprotocol/agent-sdk";
+import { signRequestFor, wrapMetaTransaction } from "@bitte-ai/agent-sdk";
 import { validateWethInput } from "../../util";
 import { NextRequest, NextResponse } from "next/server";
 import { formatUnits } from "viem";
