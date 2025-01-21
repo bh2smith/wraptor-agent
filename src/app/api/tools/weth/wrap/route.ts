@@ -1,7 +1,4 @@
-import {
-  signRequestFor,
-  wrapMetaTransaction,
-} from "@bitteprotocol/agent-sdk";
+import { signRequestFor, wrapMetaTransaction } from "@bitteprotocol/agent-sdk";
 import { validateWethInput } from "../../util";
 import { NextRequest, NextResponse } from "next/server";
 import { formatUnits } from "viem";
@@ -21,7 +18,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       {
         transaction: signRequestFor({
           chainId,
-          metaTransactions: [wrapMetaTransaction(chainId, amount > native ? native : amount)],
+          metaTransactions: [
+            wrapMetaTransaction(chainId, amount > native ? native : amount),
+          ],
         }),
         meta: {
           description: `Wraps ${formatUnits(amount, decimals)} ${symbol} to ${scanUrl}.`,

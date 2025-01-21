@@ -6,7 +6,7 @@ const bitteConfig = JSON.parse(process.env.BITTE_CONFIG || "{}");
 if (!key?.accountId) {
   console.error("no account");
 }
-console.log(bitteConfig)
+console.log(bitteConfig);
 const url = bitteConfig.url || "https://eth-wraptor.vercel.app";
 
 export async function GET() {

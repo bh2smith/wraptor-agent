@@ -1,4 +1,10 @@
-import { addressField, FieldParser, floatField, numberField, validateInput } from "@bitteprotocol/agent-sdk";
+import {
+  addressField,
+  FieldParser,
+  floatField,
+  numberField,
+  validateInput,
+} from "@bitteprotocol/agent-sdk";
 import { Network, type MetaTransaction } from "near-safe";
 import {
   type Address,
@@ -23,9 +29,9 @@ interface Input {
   safeAddress: Address;
 }
 
-const MAX_UINT256 = BigInt("115792089237316195423570985008687907853269984665640564039457584007913129639935");
-
-
+const MAX_UINT256 = BigInt(
+  "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+);
 
 function exists(param: string | null, name: string): string {
   if (!param) {
@@ -56,9 +62,11 @@ export function booleanField(param: string | null, name: string): boolean {
       const lowerCaseInput = input.toLowerCase();
       if (lowerCaseInput === "true") return true;
       if (lowerCaseInput === "false") return false;
-      throw new Error(`Invalid Boolean field '${name}': Not a valid boolean value`);
+      throw new Error(
+        `Invalid Boolean field '${name}': Not a valid boolean value`,
+      );
     },
-    "Invalid Boolean field"
+    "Invalid Boolean field",
   );
   return value;
 }
@@ -76,18 +84,25 @@ interface Balances {
   wrapped: bigint;
 }
 
-export async function getBalances(address: Address, chainId: number): Promise<Balances> {
+export async function getBalances(
+  address: Address,
+  chainId: number,
+): Promise<Balances> {
   const network = Network.fromChainId(chainId);
   const wrappedAddress = network.nativeCurrency.wrappedAddress;
   if (!wrappedAddress) {
-    throw new Error(`Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`);
+    throw new Error(
+      `Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`,
+    );
   }
   console.log("wrappedAddress", wrappedAddress);
   const [native, wrapped] = await Promise.all([
-    network.client.getBalance({address}),
+    network.client.getBalance({ address }),
     network.client.readContract({
       address: getAddress(wrappedAddress),
-      abi: parseAbi(["function balanceOf(address owner) view returns (uint256)"]),
+      abi: parseAbi([
+        "function balanceOf(address owner) view returns (uint256)",
+      ]),
       functionName: "balanceOf",
       args: [address],
     }),
@@ -104,13 +119,10 @@ export async function validateWethInput(params: URLSearchParams): Promise<{
   nativeAsset: NativeAsset;
   balances: Balances;
 }> {
-
-  const {
-    chainId,
-    amount,
-    safeAddress,
-    all,
-  } = validateInput<Input>(params, parsers);
+  const { chainId, amount, safeAddress, all } = validateInput<Input>(
+    params,
+    parsers,
+  );
   const balances = await getBalances(safeAddress, chainId);
   console.log("balances", balances);
   return {
