@@ -62,9 +62,7 @@ export async function GET() {
           summary: "Encode null Transaction",
           description: "Encodes null Transaction as MetaTransaction",
           operationId: "null",
-          parameters: [
-            { $ref: "#/components/parameters/chainId" },
-          ],
+          parameters: [{ $ref: "#/components/parameters/chainId" }],
           responses: {
             "200": { $ref: "#/components/responses/SignRequest200" },
           },

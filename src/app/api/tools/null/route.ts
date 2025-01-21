@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { zeroAddress } from "viem";
-import {
-  signRequestFor,
-} from "@bitteprotocol/agent-sdk";
-
+import { signRequestFor } from "@bitteprotocol/agent-sdk";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const search = req.nextUrl.searchParams;
