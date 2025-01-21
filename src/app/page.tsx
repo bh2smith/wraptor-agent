@@ -16,7 +16,6 @@ console.error = (...args) => {
 };
 
 // Dynamically import Swagger UI with loading component and no SSR
-// @ts-expect-error: Swagger UI is not a valid React component
 const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
   ssr: false,
   loading: () => <div>Loading API documentation...</div>,

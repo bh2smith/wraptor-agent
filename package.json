@@ -14,17 +14,12 @@
   "dependencies": {
     "@bitteprotocol/agent-sdk": "^0.0.8",
     "next": "15.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "swagger-ui-react": "5.12.0",
-    "vercel-url": "^0.2.6",
     "viem": "^2.22.10"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
     "@types/swagger-ui-react": "^4.18.3",
     "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
