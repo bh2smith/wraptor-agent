@@ -1,6 +1,6 @@
-# Near Safe Agent
+# Bitte Open WETH9 Agent
 
-A Next.js project that provides an AI assistant for managing [Safe](https://safe.global) accounts through a plugin interface.
+A Next.js project that provides an AI assistant for wrapping and unwrapping WETH9 through a plugin interface.
 
 ## Getting Started
 
@@ -16,19 +16,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to access 
 
 This agent provides an OpenAPI interface for managing Safe accounts with the following endpoints:
 
-### Safe Deployment
-`GET /api/tools/safe/deploy`
+### Wrap
+`GET /api/tools/weth/wrap`
 
-Encodes a null transaction that triggers Safe deployment on a specified chain when executed. Requires:
-- `chainId`: The network where the Safe will be deployed
-
-### Recovery Address Management
-`GET /api/tools/safe/add_recovery`
-
-Adds a recovery address to an existing Safe using the `addOwnerWithThreshold` function. Requires:
-- `chainId`: Network where the Safe exists
-- `from`: The Safe address
-- `recoveryAddress`: Address to add as recovery
+### Unwrap
+`GET /api/tools/weth/unwrap`
 
 ### Response Format
 
@@ -45,7 +37,7 @@ All successful transactions return a standard format:
     }]
   },
   meta: {
-    safeUrl: string // URL to view the transaction in Safe UI
+    description: string // Description of the transaction
   }
 }
 ```
@@ -62,5 +54,5 @@ The assistant will proactively ask users if they want to add a recovery address 
 
 ## Learn More
 
-- [Safe Documentation](https://docs.safe.global)
-- [Safe App Interface](https://app.safe.global)
+- [Bitte Documentation](https://docs.bitte.ai)
+- [Bitte App Interface](https://wallet.bitte.ai)
