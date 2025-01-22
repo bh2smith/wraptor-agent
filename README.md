@@ -45,12 +45,7 @@ All successful transactions return a standard format:
 ## AI Assistant Integration
 
 The agent includes an AI assistant configured to:
-- Help users deploy new Safe accounts
-- Guide users through adding recovery addresses
-- Generate EVM transactions for Safe operations
-- Provide Safe interface URLs for transaction verification
-
-The assistant will proactively ask users if they want to add a recovery address during deployment flows.
+- Build WETH9 deposit & withdrawal transactions
 
 ## Learn More
 
