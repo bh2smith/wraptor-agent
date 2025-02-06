@@ -5,7 +5,7 @@ import {
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
-import { Network, type MetaTransaction } from "near-safe";
+import { Network, SignRequestData, type MetaTransaction } from "near-safe";
 import {
   type Address,
   encodeFunctionData,
@@ -95,7 +95,6 @@ export async function getBalances(
       `Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`,
     );
   }
-  console.log("wrappedAddress", wrappedAddress);
   const [native, wrapped] = await Promise.all([
     network.client.getBalance({ address }),
     network.client.readContract({
@@ -175,4 +174,9 @@ export function getNativeAsset(chainId: number): NativeAsset {
     scanUrl: `${network.scanUrl}/address/${wethAddress}`,
     decimals: network.nativeCurrency.decimals,
   };
+}
+
+export interface SignRequestResponse {
+  transaction: SignRequestData;
+  meta: { description: string };
 }
