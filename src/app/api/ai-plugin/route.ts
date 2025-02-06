@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { DESCRIPTION, IMAGE, INSTRUCTIONS, NAME } from "./constants";
 
-const key = JSON.parse(process.env.BITTE_KEY || "{}");
 const bitteConfig = JSON.parse(process.env.BITTE_CONFIG || "{}");
-if (!key?.accountId) {
-  console.error("no account");
-}
 
 const url = bitteConfig.url || "https://wraptor-agent.vercel.app/";
 
@@ -19,7 +15,7 @@ export async function GET() {
     },
     servers: [{ url }],
     "x-mb": {
-      "account-id": key.accountId,
+      "account-id": process.env.BITTE_AGENT_ID,
       assistant: {
         name: NAME,
         description: DESCRIPTION,

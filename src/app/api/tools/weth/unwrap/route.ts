@@ -1,36 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { formatUnits } from "viem";
-import { signRequestFor, unwrapMetaTransaction } from "@bitte-ai/agent-sdk";
-import { validateWethInput } from "../../util";
-export async function GET(req: NextRequest): Promise<NextResponse> {
+import {
+  handleRequest,
+  signRequestFor,
+  unwrapMetaTransaction,
+} from "@bitte-ai/agent-sdk";
+import { validateWethInput, SignRequestResponse } from "../../util";
+
+async function logic(req: NextRequest): Promise<SignRequestResponse> {
   const search = req.nextUrl.searchParams;
   console.log("unwrap/", search);
-  try {
-    const {
+  const {
+    chainId,
+    amount,
+    nativeAsset: { symbol, scanUrl, decimals },
+    balances: { wrapped },
+  } = await validateWethInput(search);
+  const total = amount > wrapped ? wrapped : amount;
+  return {
+    transaction: signRequestFor({
       chainId,
-      amount,
-      nativeAsset: { symbol, scanUrl, decimals },
-      balances: { wrapped },
-    } = await validateWethInput(search);
-    const total = amount > wrapped ? wrapped : amount;
-    return NextResponse.json(
-      {
-        transaction: signRequestFor({
-          chainId,
-          metaTransactions: [unwrapMetaTransaction(chainId, total)],
-        }),
-        meta: {
-          description: `Withdraws ${formatUnits(total, decimals)} ${symbol} from contract ${scanUrl}.`,
-        },
-      },
-      { status: 200 },
-    );
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : `Unknown error occurred ${String(error)}`;
-    console.error("unwrap/ error", message);
-    return NextResponse.json({ ok: false, message }, { status: 400 });
-  }
+      metaTransactions: [unwrapMetaTransaction(chainId, total)],
+    }),
+    meta: {
+      description: `Withdraws ${formatUnits(total, decimals)} ${symbol} from contract ${scanUrl}.`,
+    },
+  };
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  return handleRequest(req, logic, (result) => NextResponse.json(result));
 }
