@@ -52,6 +52,18 @@ export async function GET() {
           },
         },
       },
+      "/api/tools/null": {
+        get: {
+          tags: ["null"],
+          summary: "Encode null Transaction",
+          description: "Encodes null Transaction as MetaTransaction",
+          operationId: "null",
+          parameters: [{ $ref: "#/components/parameters/chainId" }],
+          responses: {
+            "200": { $ref: "#/components/responses/SignRequest200" },
+          },
+        },
+      },
       "/api/tools/weth/wrap": {
         get: {
           tags: ["wrap"],
