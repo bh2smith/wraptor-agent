@@ -13,20 +13,20 @@
   },
   "dependencies": {
     "@bitte-ai/agent-sdk": "^0.1.8",
-    "near-safe": "^0.9.10",
+    "near-safe": "^0.9.11",
     "next": "15.1.7",
     "redoc": "^2.4.0",
-    "viem": "^2.23.1"
+    "viem": "^2.23.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.2",
     "@types/react": "^19.0.8",
     "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
     "eslint-config-next": "15.1.7",
     "jest": "^29.7.0",
-    "make-agent": "0.2.7",
+    "make-agent": "0.2.9",
     "prettier": "^3.5.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
