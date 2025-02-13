@@ -15,7 +15,7 @@ export async function GET() {
     },
     servers: [{ url }],
     "x-mb": {
-      "account-id": process.env.BITTE_AGENT_ID,
+      "account-id": "max-normal.near",
       assistant: {
         name: NAME,
         description: DESCRIPTION,
