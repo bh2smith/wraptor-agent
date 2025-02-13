@@ -3,7 +3,7 @@ import { DESCRIPTION, IMAGE, INSTRUCTIONS, NAME } from "./constants";
 
 const bitteConfig = JSON.parse(process.env.BITTE_CONFIG || "{}");
 
-const url = bitteConfig.url || "https://wraptor-agent.vercel.app/";
+const url = bitteConfig.url || "https://wraptor-agent.vercel.app";
 
 export async function GET() {
   const pluginData = {
@@ -21,8 +21,8 @@ export async function GET() {
         description: DESCRIPTION,
         instructions: INSTRUCTIONS,
         tools: [{ type: "generate-evm-tx" }],
+        image: `${url}/${IMAGE}`,
       },
-      image: `${url}/${IMAGE}`,
     },
     paths: {
       "/api/health": {
