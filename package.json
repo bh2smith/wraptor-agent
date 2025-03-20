@@ -12,24 +12,24 @@
     "test": "jest --config jest.config.ts"
   },
   "dependencies": {
-    "@bitte-ai/agent-sdk": "^0.1.8",
+    "@bitte-ai/agent-sdk": "^0.1.9",
     "near-safe": "^0.9.11",
-    "next": "15.1.7",
+    "next": "15.2.3",
     "redoc": "^2.4.0",
-    "viem": "^2.23.2"
+    "viem": "^2.23.13"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.2",
-    "@types/react": "^19.0.8",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.12",
     "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
-    "eslint-config-next": "15.1.7",
+    "eslint-config-next": "15.2.3",
     "jest": "^29.7.0",
-    "make-agent": "0.2.9",
-    "prettier": "^3.5.0",
-    "ts-jest": "^29.2.5",
+    "make-agent": "0.2.11",
+    "prettier": "^3.5.3",
+    "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }
