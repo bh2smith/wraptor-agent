@@ -59,7 +59,7 @@ export async function GET() {
             { $ref: "#/components/parameters/all" },
           ],
           responses: {
-            "200": { $ref: "#/components/responses/SignRequest200" },
+            "200": { $ref: "#/components/responses/SignRequestResponse200" },
             "400": { $ref: "#/components/responses/BadRequest400" },
           },
         },
@@ -77,7 +77,7 @@ export async function GET() {
             { $ref: "#/components/parameters/all" },
           ],
           responses: {
-            "200": { $ref: "#/components/responses/SignRequest200" },
+            "200": { $ref: "#/components/responses/SignRequestResponse200" },
             "400": { $ref: "#/components/responses/BadRequest400" },
           },
         },
