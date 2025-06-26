@@ -10,6 +10,7 @@ import {
   type Address,
   encodeFunctionData,
   getAddress,
+  maxUint256,
   parseAbi,
   parseEther,
   toHex,
@@ -26,12 +27,8 @@ interface Input {
   chainId: number;
   amount: number;
   all: boolean;
-  safeAddress: Address;
+  evmAddress: Address;
 }
-
-const MAX_UINT256 = BigInt(
-  "115792089237316195423570985008687907853269984665640564039457584007913129639935",
-);
 
 function exists(param: string | null, name: string): string {
   if (!param) {
@@ -76,7 +73,7 @@ const parsers: FieldParser<Input> = {
   // Note that this is a float (i.e. token units)
   amount: floatField,
   all: booleanField,
-  safeAddress: addressField,
+  evmAddress: addressField,
 };
 
 interface Balances {
@@ -118,16 +115,16 @@ export async function validateWethInput(params: URLSearchParams): Promise<{
   nativeAsset: NativeAsset;
   balances: Balances;
 }> {
-  const { chainId, amount, safeAddress, all } = validateInput<Input>(
+  const { chainId, amount, evmAddress, all } = validateInput<Input>(
     params,
     parsers,
   );
-  const balances = await getBalances(safeAddress, chainId);
+  const balances = await getBalances(evmAddress, chainId);
   console.log("balances", balances);
   return {
     chainId,
     // Exceeds balances.
-    amount: all ? MAX_UINT256 : parseEther(amount.toString()),
+    amount: all ? maxUint256 : parseEther(amount.toString()),
     nativeAsset: getNativeAsset(chainId),
     balances,
   };
