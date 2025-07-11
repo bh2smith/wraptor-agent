@@ -71,6 +71,15 @@ const wrapped: WrappedAsset[] = [
     },
   },
   {
+    // Unichain
+    chainId: 1666600000,
+    wrappedNative: {
+      address: SUPER_CHAIN_WETH,
+      symbol: "WETH",
+      decimals: 18,
+    },
+  },
+  {
     // Polygon
     chainId: 137,
     wrappedNative: {
@@ -116,6 +125,15 @@ const wrapped: WrappedAsset[] = [
     },
   },
   {
+    // Mode
+    chainId: 34443,
+    wrappedNative: {
+      address: SUPER_CHAIN_WETH,
+      symbol: "WETH",
+      decimals: 18,
+    },
+  },
+  {
     // Avalanche C-Chain
     chainId: 43114,
     wrappedNative: {
@@ -129,6 +147,33 @@ const wrapped: WrappedAsset[] = [
     chainId: 42161,
     wrappedNative: {
       address: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      symbol: "WETH",
+      decimals: 18,
+    },
+  },
+  {
+    // Celo
+    chainId: 42220,
+    wrappedNative: {
+      address: "0x471EcE3750Da237f93B8E339c536989b8978a438",
+      symbol: "CELO",
+      decimals: 18,
+    },
+  },
+  {
+    // Berachain
+    chainId: 80094,
+    wrappedNative: {
+      address: "0x6969696969696969696969696969696969696969",
+      symbol: "WBERA",
+      decimals: 18,
+    },
+  },
+  {
+    // Blast
+    chainId: 81457,
+    wrappedNative: {
+      address: "0x4300000000000000000000000000000000000004",
       symbol: "WETH",
       decimals: 18,
     },
