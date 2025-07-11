@@ -5,7 +5,8 @@ import {
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
-import { Network, SignRequestData, type MetaTransaction } from "near-safe";
+import { Network } from "near-safe";
+import type { SignRequest, MetaTransaction } from "@bitte-ai/types";
 import {
   type Address,
   encodeFunctionData,
@@ -174,6 +175,6 @@ export function getNativeAsset(chainId: number): NativeAsset {
 }
 
 export interface SignRequestResponse {
-  transaction: SignRequestData;
+  transaction: SignRequest;
   meta: { description: string };
 }
