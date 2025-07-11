@@ -108,7 +108,7 @@ describe("Wrapped Token Holder Counts", () => {
 
     const successfulSupplies = results
       .filter(
-        (result): result is PromiseFulfilledResult<bigint> =>
+        (result): result is PromiseFulfilledResult<number> =>
           result.status === "fulfilled",
       )
       .map((result) => result.value);
