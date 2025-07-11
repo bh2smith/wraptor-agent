@@ -187,6 +187,15 @@ const wrapped: WrappedAsset[] = [
       decimals: 18,
     },
   },
+  {
+    // Sepolia
+    chainId: 11155111,
+    wrappedNative: {
+      address: "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
+      symbol: "WETH",
+      decimals: 18,
+    },
+  },
 ];
 
 export const wrappedMap: WrappedMap = wrapped.reduce((acc, item) => {

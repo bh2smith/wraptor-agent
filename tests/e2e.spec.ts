@@ -1,11 +1,10 @@
 import { getClient } from "@/src/app/api/tools/util";
 import { wrappedMap } from "@/src/lib/static";
-import { getChainById } from "@bitte-ai/agent-sdk";
-import { parseAbi, getAddress } from "viem";
+import { parseAbi, getAddress, formatUnits } from "viem";
 
-const zero = BigInt(0);
+const zero = 0;
 // Function to get total supply of a token
-async function getTotalSupply(chainId: number): Promise<bigint> {
+async function getTotalSupply(chainId: number): Promise<number> {
   const client = getClient(chainId);
   const wrappedAddress = wrappedMap[chainId].address;
 
@@ -15,7 +14,7 @@ async function getTotalSupply(chainId: number): Promise<bigint> {
       abi: parseAbi(["function totalSupply() view returns (uint256)"]),
       functionName: "totalSupply",
     });
-    return totalSupply;
+    return Number(formatUnits(totalSupply, wrappedMap[chainId].decimals));
   } catch (error) {
     console.error(`Failed to get total supply for chain ${chainId}:`, error);
     return zero;
@@ -27,10 +26,9 @@ async function validateTokenAccessibility(chainId: number): Promise<{
   chainId: number;
   symbol: string;
   address: string;
-  totalSupply: bigint;
+  totalSupply: number;
   isAccessible: boolean;
 }> {
-  const chain = getChainById(chainId);
   const wrappedToken = wrappedMap[chainId];
 
   try {
@@ -40,7 +38,7 @@ async function validateTokenAccessibility(chainId: number): Promise<{
       symbol: wrappedToken.symbol,
       address: wrappedToken.address,
       totalSupply,
-      isAccessible: totalSupply > zero,
+      isAccessible: totalSupply > 1000,
     };
   } catch (error) {
     return {
