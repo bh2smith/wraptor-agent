@@ -65,14 +65,14 @@ const wrapped: WrappedAsset[] = [
     // Gnosis Chain
     chainId: 100,
     wrappedNative: {
-      address: "0xC3D3f84Abb494ce5199D5d4D815b10EC29529ff8",
+      address: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
       symbol: "WxDAI",
       decimals: 18,
     },
   },
   {
     // Unichain
-    chainId: 1666600000,
+    chainId: 130,
     wrappedNative: {
       address: SUPER_CHAIN_WETH,
       symbol: "WETH",
@@ -189,7 +189,7 @@ const wrapped: WrappedAsset[] = [
   },
 ];
 
-const wrappedMap: WrappedMap = wrapped.reduce((acc, item) => {
+export const wrappedMap: WrappedMap = wrapped.reduce((acc, item) => {
   acc[item.chainId] = item.wrappedNative;
   return acc;
 }, {} as WrappedMap);
