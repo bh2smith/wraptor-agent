@@ -2,27 +2,24 @@ import {
   addressField,
   FieldParser,
   floatField,
+  getChainById,
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
-import { Network } from "near-safe";
 import type { SignRequest, MetaTransaction } from "@bitte-ai/types";
 import {
   type Address,
+  createPublicClient,
   encodeFunctionData,
   getAddress,
+  http,
   maxUint256,
   parseAbi,
   parseEther,
+  PublicClient,
   toHex,
 } from "viem";
-
-type NativeAsset = {
-  address: Address;
-  symbol: string;
-  scanUrl: string;
-  decimals: number;
-};
+import { getWrappedNative, WrappedNative } from "@/src/lib/static";
 
 interface Input {
   chainId: number;
@@ -82,20 +79,23 @@ interface Balances {
   wrapped: bigint;
 }
 
+export function getClient(chainId: number): PublicClient {
+  const chain = getChainById(chainId);
+  return createPublicClient({
+    chain,
+    transport: http(), // uses the default RPC URL from the chain object
+  });
+}
+
 export async function getBalances(
   address: Address,
   chainId: number,
 ): Promise<Balances> {
-  const network = Network.fromChainId(chainId);
-  const wrappedAddress = network.nativeCurrency.wrappedAddress;
-  if (!wrappedAddress) {
-    throw new Error(
-      `Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`,
-    );
-  }
+  const client = getClient(chainId);
+  const wrappedAddress = getWrappedNative(chainId).address;
   const [native, wrapped] = await Promise.all([
-    network.client.getBalance({ address }),
-    network.client.readContract({
+    client.getBalance({ address }),
+    client.readContract({
       address: getAddress(wrappedAddress),
       abi: parseAbi([
         "function balanceOf(address owner) view returns (uint256)",
@@ -113,7 +113,7 @@ export async function getBalances(
 export async function validateWethInput(params: URLSearchParams): Promise<{
   chainId: number;
   amount: bigint;
-  nativeAsset: NativeAsset;
+  nativeAsset: WrappedNative;
   balances: Balances;
 }> {
   const { chainId, amount, evmAddress, all } = validateInput<Input>(
@@ -126,7 +126,7 @@ export async function validateWethInput(params: URLSearchParams): Promise<{
     chainId,
     // Exceeds balances.
     amount: all ? maxUint256 : parseEther(amount.toString()),
-    nativeAsset: getNativeAsset(chainId),
+    nativeAsset: getWrappedNative(chainId),
     balances,
   };
 }
@@ -136,7 +136,7 @@ export const unwrapMetaTransaction = (
   amount: bigint,
 ): MetaTransaction => {
   return {
-    to: getNativeAsset(chainId).address,
+    to: getWrappedNative(chainId).address,
     value: "0x0",
     data: encodeFunctionData({
       abi: parseAbi(["function withdraw(uint wad)"]),
@@ -151,28 +151,12 @@ export const wrapMetaTransaction = (
   amount: bigint,
 ): MetaTransaction => {
   return {
-    to: getNativeAsset(chainId).address,
+    to: getWrappedNative(chainId).address,
     value: toHex(amount),
     // methodId for weth.deposit
     data: "0xd0e30db0",
   };
 };
-
-export function getNativeAsset(chainId: number): NativeAsset {
-  const network = Network.fromChainId(chainId);
-  const wethAddress = network.nativeCurrency.wrappedAddress;
-  if (!wethAddress) {
-    throw new Error(
-      `Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`,
-    );
-  }
-  return {
-    address: getAddress(wethAddress),
-    symbol: network.nativeCurrency.symbol,
-    scanUrl: `${network.scanUrl}/address/${wethAddress}`,
-    decimals: network.nativeCurrency.decimals,
-  };
-}
 
 export interface SignRequestResponse {
   transaction: SignRequest;
