@@ -2,6 +2,7 @@ import {
   addressField,
   FieldParser,
   floatField,
+  getChainById,
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
@@ -16,6 +17,58 @@ import {
   parseEther,
   toHex,
 } from "viem";
+import data from '@/data/wrapped-native.json';
+
+export type WrappedNative = {
+  address: string;
+  symbol: string;
+  decimals: number;
+};
+
+export const wrappedMap: Record<number, WrappedNative> = data;
+
+import path from "path";
+import fs from "fs/promises";
+
+type WrappedNative = {
+  address: Address;
+  symbol: string;
+  decimals: number;
+};
+
+type WrappedAsset = {
+  chainId: number;
+  wrappedNative: WrappedNative;
+};
+
+type WrappedMap = Record<number, WrappedNative>;
+
+type Props = {
+  wrappedNative: WrappedMap;
+};
+
+
+
+
+export async function getStaticProps(): Promise<{props: Props }> {
+  const filePath = path.join(process.cwd(), "public", "wrapMap.json");
+  const fileContents = await fs.readFile(filePath, "utf8");
+  const data: WrappedAsset[] = JSON.parse(fileContents);
+
+  const wrappedMap: Record<number, WrappedNative> = data.reduce(
+    (acc, item) => {
+      acc[item.chainId] = item.wrappedNative;
+      return acc;
+    },
+    {} as Record<number, WrappedNative>,
+  );
+
+  return {
+    props: {
+      wrappedNative: wrappedMap,
+    },
+  };
+}
 
 type NativeAsset = {
   address: Address;
@@ -158,19 +211,21 @@ export const wrapMetaTransaction = (
   };
 };
 
-export function getNativeAsset(chainId: number): NativeAsset {
-  const network = Network.fromChainId(chainId);
-  const wethAddress = network.nativeCurrency.wrappedAddress;
-  if (!wethAddress) {
+export async function getNativeAsset(chainId: number, props: ): Promise<NativeAsset> {
+  const chain = getChainById(chainId);
+  const {props} = await getStaticProps();
+
+  const weth = props.wrappedNative[chainId];
+  if (!weth) {
     throw new Error(
-      `Couldn't find wrapped address for Network ${network.name} (chainId=${chainId})`,
+      `Couldn't find wrapped address for Network ${chain.name} (chainId=${chainId})`,
     );
   }
   return {
-    address: getAddress(wethAddress),
-    symbol: network.nativeCurrency.symbol,
-    scanUrl: `${network.scanUrl}/address/${wethAddress}`,
-    decimals: network.nativeCurrency.decimals,
+    address: getAddress(weth.address),
+    symbol: chain.nativeCurrency.symbol,
+    scanUrl: `${chain.blockExplorers?.default.url}/address/${weth.address}`,
+    decimals: weth.decimals,
   };
 }
 
