@@ -80,9 +80,8 @@ interface Balances {
 }
 
 export function getClient(chainId: number): PublicClient {
-  const chain = getChainById(chainId);
   return createPublicClient({
-    chain,
+    chain: getChainById(chainId),
     transport: http(), // uses the default RPC URL from the chain object
   });
 }
