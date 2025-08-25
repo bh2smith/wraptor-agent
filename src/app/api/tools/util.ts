@@ -9,6 +9,7 @@ import {
 import type { SignRequest, MetaTransaction } from "@bitte-ai/types";
 import {
   type Address,
+  Chain,
   createPublicClient,
   encodeFunctionData,
   getAddress,
@@ -81,7 +82,8 @@ interface Balances {
 
 export function getClient(chainId: number): PublicClient {
   return createPublicClient({
-    chain: getChainById(chainId),
+    // TODO(bh2smith): Fix this once and for all.
+    chain: getChainById(chainId) as Chain,
     transport: http(), // uses the default RPC URL from the chain object
   });
 }
