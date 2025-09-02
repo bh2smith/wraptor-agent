@@ -16,8 +16,7 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
     nativeAsset: { symbol, scanUrl, decimals },
     balances: { native },
   } = await validateWethInput(search);
-  // TODO(bh2smith) if all - determine if account is contract and deduct gas...
-  return {
+  const response = {
     transaction: signRequestFor({
       chainId,
       metaTransactions: [
@@ -26,8 +25,11 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
     }),
     meta: {
       description: `Wraps ${formatUnits(amount, decimals)} ${symbol} to ${scanUrl}.`,
-    },
-  };
+    }
+  }
+  console.log("Response", response);
+  // TODO(bh2smith) if all - determine if account is contract and deduct gas...
+  return response;
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

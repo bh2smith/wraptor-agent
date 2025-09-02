@@ -17,7 +17,7 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
     balances: { wrapped },
   } = await validateWethInput(search);
   const total = amount > wrapped ? wrapped : amount;
-  return {
+  const response = {
     transaction: signRequestFor({
       chainId,
       metaTransactions: [unwrapMetaTransaction(chainId, total)],
@@ -26,6 +26,8 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
       description: `Withdraws ${formatUnits(total, decimals)} ${symbol} from contract ${scanUrl}.`,
     },
   };
+  console.log("Response", response);
+  return response;
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
