@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { formatUnits } from "viem";
-import {
-  handleRequest,
-  signRequestFor,
-  unwrapMetaTransaction,
-} from "@bitte-ai/agent-sdk";
+import { unwrapMetaTransaction } from "@bitte-ai/agent-sdk/evm";
+
 import { validateWethInput, SignRequestResponse } from "../../util";
+import { handleRequest } from "@bitte-ai/agent-sdk";
 
 async function logic(req: NextRequest): Promise<SignRequestResponse> {
   const search = req.nextUrl.searchParams;
@@ -17,11 +15,12 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
     balances: { wrapped },
   } = await validateWethInput(search);
   const total = amount > wrapped ? wrapped : amount;
-  const response = {
-    transaction: signRequestFor({
+  const response: SignRequestResponse = {
+    transaction: {
       chainId,
-      metaTransactions: [unwrapMetaTransaction(chainId, total)],
-    }),
+      method: "eth_sendTransaction",
+      params: [unwrapMetaTransaction(chainId, total)],
+    },
     meta: {
       description: `Withdraws ${formatUnits(total, decimals)} ${symbol} from contract ${scanUrl}.`,
     },

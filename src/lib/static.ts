@@ -1,4 +1,4 @@
-import { getChainById } from "@bitte-ai/agent-sdk";
+import { getChainById } from "@bitte-ai/agent-sdk/evm";
 import { type Address } from "viem";
 
 type Asset = {

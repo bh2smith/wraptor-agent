@@ -2,14 +2,12 @@ import {
   addressField,
   FieldParser,
   floatField,
-  getChainById,
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
 import type { SignRequest, MetaTransaction } from "@bitte-ai/types";
 import {
   type Address,
-  Chain,
   createPublicClient,
   encodeFunctionData,
   getAddress,
@@ -21,6 +19,7 @@ import {
   toHex,
 } from "viem";
 import { getWrappedNative, WrappedNative } from "@/src/lib/static";
+import { getChainById } from "@bitte-ai/agent-sdk/evm";
 
 interface Input {
   chainId: number;
@@ -82,8 +81,7 @@ interface Balances {
 
 export function getClient(chainId: number): PublicClient {
   return createPublicClient({
-    // TODO(bh2smith): Fix this once and for all.
-    chain: getChainById(chainId) as Chain,
+    chain: getChainById(chainId),
     transport: http(), // uses the default RPC URL from the chain object
   });
 }
