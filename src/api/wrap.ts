@@ -9,7 +9,7 @@ import { formatUnits } from "viem";
 const wrapHandler = Router();
 
 wrapHandler.get("/", async (req: Request, res: Response) => {
-  const search = new URL(req.url).searchParams;
+  const search = new URLSearchParams(req.url);
   console.log("wrap/", search);
   const {
     chainId,

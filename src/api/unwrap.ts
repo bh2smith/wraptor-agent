@@ -9,7 +9,7 @@ import {
 const unwrapHandler = Router();
 
 async function logic(req: Request): Promise<SignRequestResponse> {
-  const search = new URL(req.url).searchParams;
+  const search = new URLSearchParams(req.url);
   console.log("unwrap/", search);
   const {
     chainId,
