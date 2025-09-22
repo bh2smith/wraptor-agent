@@ -1,4 +1,4 @@
-import { wrappedMap } from "@/src/lib/static";
+import { wrappedMap } from "./lib/static";
 
 export const NAME = "Bitte WETH Wraptor";
 export const DESCRIPTION =

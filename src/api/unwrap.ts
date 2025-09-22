@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { Router, Request, Response } from "express";
 import { formatUnits } from "viem";
-import { unwrapMetaTransaction } from "@bitte-ai/agent-sdk/evm";
+import {
+  SignRequestResponse,
+  unwrapMetaTransaction,
+  validateWethInput,
+} from "../lib/util";
 
-import { validateWethInput, SignRequestResponse } from "../../util";
-import { handleRequest } from "@bitte-ai/agent-sdk";
+const unwrapHandler = Router();
 
-async function logic(req: NextRequest): Promise<SignRequestResponse> {
-  const search = req.nextUrl.searchParams;
+async function logic(req: Request): Promise<SignRequestResponse> {
+  const search = new URL(req.url).searchParams;
   console.log("unwrap/", search);
   const {
     chainId,
@@ -29,6 +32,9 @@ async function logic(req: NextRequest): Promise<SignRequestResponse> {
   return response;
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  return handleRequest(req, logic, (result) => NextResponse.json(result));
-}
+unwrapHandler.get("/", async (req: Request, res: Response) => {
+  const x = await logic(req);
+  res.status(200).json(x);
+});
+
+export default unwrapHandler;

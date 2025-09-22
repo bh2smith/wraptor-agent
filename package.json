@@ -3,33 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"make-agent dev\"",
-    "dev-testnet": "concurrently \"next dev\" \"make-agent dev -t\"",
-    "build:next": "next build",
-    "build": "next build",
+    "agent": "concurrently \"tsx src/index.ts\" \"make-agent dev\"",
+    "api": "tsx src/index.ts",
+    "build": "tsc",
     "deploy": "make-agent deploy -u https://wraptor-agent.vercel.app/",
-    "start": "next start",
     "lint": "biome check && prettier --check '{src,tests}/**/*.{js,jsx,ts,tsx}'",
-    "fmt": "biome format --write . && prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx}'",
-    "test": "jest --config jest.config.ts"
+    "fmt": "biome format --write . && prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@bitte-ai/agent-sdk": "^0.4.1",
-    "next": "^15.5.3",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "redoc": "^2.5.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "viem": "^2.37.7"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.22",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.5.2",
-    "@types/react": "^19.1.13",
     "biome": "^0.3.3",
     "concurrently": "^9.2.1",
-    "eslint-config-next": "^15.5.3",
     "make-agent": "0.4.1",
     "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
