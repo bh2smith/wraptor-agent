@@ -1,11 +1,12 @@
-import { getClient } from "@/src/app/api/tools/util";
-import { wrappedMap } from "@/src/lib/static";
+import { describe, it, expect } from "bun:test";
 import { parseAbi, getAddress, formatUnits } from "viem";
+import { getClientForChain } from "@bitte-ai/agent-sdk/evm";
+import { wrappedMap } from "../src/lib/static";
 
 const zero = 0;
 // Function to get total supply of a token
 async function getTotalSupply(chainId: number): Promise<number> {
-  const client = getClient(chainId);
+  const client = getClientForChain(chainId);
   const wrappedAddress = wrappedMap[chainId].address;
 
   try {

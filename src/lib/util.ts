@@ -5,21 +5,22 @@ import {
   numberField,
   validateInput,
 } from "@bitte-ai/agent-sdk";
-import type { SignRequest, MetaTransaction } from "@bitte-ai/types";
 import {
   type Address,
-  createPublicClient,
   encodeFunctionData,
   getAddress,
-  http,
   maxUint256,
   parseAbi,
   parseEther,
-  PublicClient,
   toHex,
 } from "viem";
-import { getWrappedNative, WrappedNative } from "@/src/lib/static";
-import { getChainById } from "@bitte-ai/agent-sdk/evm";
+import { getWrappedNative, WrappedNative } from "./static";
+import {
+  getChainById,
+  getClientForChain,
+  MetaTransaction,
+  SignRequest,
+} from "@bitte-ai/agent-sdk/evm";
 
 interface Input {
   chainId: number;
@@ -79,18 +80,11 @@ interface Balances {
   wrapped: bigint;
 }
 
-export function getClient(chainId: number): PublicClient {
-  return createPublicClient({
-    chain: getChainById(chainId),
-    transport: http(), // uses the default RPC URL from the chain object
-  });
-}
-
 export async function getBalances(
   address: Address,
   chainId: number,
 ): Promise<Balances> {
-  const client = getClient(chainId);
+  const client = getClientForChain(chainId);
   const wrappedAddress = getWrappedNative(chainId).address;
   const [native, wrapped] = await Promise.all([
     client.getBalance({ address }),
@@ -101,6 +95,8 @@ export async function getBalances(
       ]),
       functionName: "balanceOf",
       args: [address],
+      // TODO: This is weird shit.
+      authorizationList: undefined, // or []
     }),
   ]);
   return {
