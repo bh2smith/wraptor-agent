@@ -13,7 +13,7 @@ import {
   MetaTransaction,
   SignRequest,
 } from "@bitte-ai/agent-sdk/evm";
-import { UnwrapEthInput } from "./schema";
+import { WethInput } from "./schema";
 
 interface Balances {
   native: bigint;
@@ -46,7 +46,7 @@ export async function getBalances(
   };
 }
 
-export async function refineWethInput(params: UnwrapEthInput): Promise<{
+export async function refineWethInput(params: WethInput): Promise<{
   chainId: number;
   amount: bigint;
   nativeAsset: WrappedNative;

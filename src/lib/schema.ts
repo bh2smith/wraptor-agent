@@ -19,23 +19,14 @@ const parseBoolean = z.preprocess((v) => {
   return v; // let z.boolean() handle booleans or fail on anything else
 }, z.boolean());
 
-export const WrapEthSchema = z.object({
+export const WethSchema = z.object({
   evmAddress: evmAddressSchema,
   chainId: z.coerce.number(),
   amount: z.coerce.number().positive(),
   all: parseBoolean.optional(),
 });
 
-export type WrapEthInput = z.infer<typeof WrapEthSchema>;
-
-export const UnwrapEthSchema = z.object({
-  evmAddress: evmAddressSchema,
-  chainId: z.coerce.number(),
-  amount: z.coerce.number().positive(),
-  all: parseBoolean.optional(),
-});
-
-export type UnwrapEthInput = z.infer<typeof UnwrapEthSchema>;
+export type WethInput = z.infer<typeof WethSchema>;
 
 export type ValidationResult<T> =
   | { ok: true; query: T }

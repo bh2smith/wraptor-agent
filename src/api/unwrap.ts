@@ -5,12 +5,12 @@ import {
   SignRequestResponse,
   unwrapMetaTransaction,
 } from "../lib/util";
-import { UnwrapEthSchema, validateQuery, isInvalid } from "../lib/schema";
+import { WethSchema, validateQuery, isInvalid } from "../lib/schema";
 
 const unwrapHandler = Router();
 
 unwrapHandler.get("/", async (req: Request, res: Response) => {
-  const input = validateQuery(req, UnwrapEthSchema);
+  const input = validateQuery(req, WethSchema);
   if (isInvalid(input)) {
     res.status(400).json({
       error: input.error,

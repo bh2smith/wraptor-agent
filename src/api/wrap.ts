@@ -5,12 +5,12 @@ import {
   wrapMetaTransaction,
 } from "../lib/util";
 import { formatUnits } from "viem";
-import { validateQuery, WrapEthSchema, isInvalid } from "../lib/schema";
+import { validateQuery, WethSchema, isInvalid } from "../lib/schema";
 
 const wrapHandler = Router();
 
 wrapHandler.get("/", async (req: Request, res: Response) => {
-  const input = validateQuery(req, WrapEthSchema);
+  const input = validateQuery(req, WethSchema);
   if (isInvalid(input)) {
     res.status(400).json({
       error: input.error,
