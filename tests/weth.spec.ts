@@ -1,5 +1,3 @@
-// util.test.ts
-import { describe, it, expect } from "bun:test";
 import { getBalances } from "../src/lib/util";
 
 describe("getBalances", () => {

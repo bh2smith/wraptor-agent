@@ -1,4 +1,3 @@
-import { describe, it, expect } from "bun:test";
 import { parseAbi, getAddress, formatUnits } from "viem";
 import { getClientForChain } from "@bitte-ai/agent-sdk/evm";
 import { wrappedMap } from "../src/lib/static";
