@@ -14,7 +14,8 @@
     "@bitte-ai/agent-sdk": "^0.4.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "viem": "^2.37.7"
+    "viem": "^2.37.7",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/bun": "^1.2.22",

@@ -1,11 +1,4 @@
 import {
-  addressField,
-  FieldParser,
-  floatField,
-  numberField,
-  validateInput,
-} from "@bitte-ai/agent-sdk";
-import {
   type Address,
   encodeFunctionData,
   getAddress,
@@ -16,64 +9,11 @@ import {
 } from "viem";
 import { getWrappedNative, WrappedNative } from "./static";
 import {
-  getChainById,
   getClientForChain,
   MetaTransaction,
   SignRequest,
 } from "@bitte-ai/agent-sdk/evm";
-
-interface Input {
-  chainId: number;
-  amount: number;
-  all: boolean;
-  evmAddress: Address;
-}
-
-function exists(param: string | null, name: string): string {
-  if (!param) {
-    throw new Error(`Missing required field: '${name}'`);
-  }
-  return param;
-}
-
-function parseField<T>(
-  param: string | null,
-  name: string,
-  parser: (value: string) => T,
-  errorMessage: string,
-): T {
-  const value = exists(param, name);
-  try {
-    return parser(value);
-  } catch {
-    throw new Error(`${errorMessage} '${name}': ${value}`);
-  }
-}
-
-export function booleanField(param: string | null, name: string): boolean {
-  const value = parseField(
-    param,
-    name,
-    (input) => {
-      const lowerCaseInput = input.toLowerCase();
-      if (lowerCaseInput === "true") return true;
-      if (lowerCaseInput === "false") return false;
-      throw new Error(
-        `Invalid Boolean field '${name}': Not a valid boolean value`,
-      );
-    },
-    "Invalid Boolean field",
-  );
-  return value;
-}
-
-const parsers: FieldParser<Input> = {
-  chainId: numberField,
-  // Note that this is a float (i.e. token units)
-  amount: floatField,
-  all: booleanField,
-  evmAddress: addressField,
-};
+import { UnwrapEthInput } from "./schema";
 
 interface Balances {
   native: bigint;
@@ -86,6 +26,7 @@ export async function getBalances(
 ): Promise<Balances> {
   const client = getClientForChain(chainId);
   const wrappedAddress = getWrappedNative(chainId).address;
+  // TODO: Multicall.
   const [native, wrapped] = await Promise.all([
     client.getBalance({ address }),
     client.readContract({
@@ -105,16 +46,13 @@ export async function getBalances(
   };
 }
 
-export async function validateWethInput(params: URLSearchParams): Promise<{
+export async function refineWethInput(params: UnwrapEthInput): Promise<{
   chainId: number;
   amount: bigint;
   nativeAsset: WrappedNative;
   balances: Balances;
 }> {
-  const { chainId, amount, evmAddress, all } = validateInput<Input>(
-    params,
-    parsers,
-  );
+  const { chainId, amount, evmAddress, all } = params;
   const balances = await getBalances(evmAddress, chainId);
   console.log("balances", balances);
   return {

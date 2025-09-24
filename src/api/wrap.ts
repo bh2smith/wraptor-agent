@@ -1,22 +1,29 @@
 import { Router, Request, Response } from "express";
 import {
   SignRequestResponse,
-  validateWethInput,
+  refineWethInput,
   wrapMetaTransaction,
 } from "../lib/util";
 import { formatUnits } from "viem";
+import { validateQuery, WrapEthSchema, isInvalid } from "../lib/schema";
 
 const wrapHandler = Router();
 
 wrapHandler.get("/", async (req: Request, res: Response) => {
-  const search = new URLSearchParams(req.url);
-  console.log("wrap/", search);
+  console.log("wrap/", req.url);
+  const input = validateQuery(new URLSearchParams(req.url), WrapEthSchema);
+  if (isInvalid(input)) {
+    res.status(400).json({
+      error: input.error,
+    });
+    return;
+  }
   const {
     chainId,
     amount,
     nativeAsset: { symbol, scanUrl, decimals },
     balances: { native },
-  } = await validateWethInput(search);
+  } = await refineWethInput(input.query);
   const response: SignRequestResponse = {
     transaction: {
       chainId,
