@@ -10,9 +10,7 @@ import { UnwrapEthSchema, validateQuery, isInvalid } from "../lib/schema";
 const unwrapHandler = Router();
 
 unwrapHandler.get("/", async (req: Request, res: Response) => {
-  console.log("Raw Params", req.url);
-  const input = validateQuery(new URLSearchParams(req.url), UnwrapEthSchema);
-  console.log("unwrap/", input);
+  const input = validateQuery(req, UnwrapEthSchema);
   if (isInvalid(input)) {
     res.status(400).json({
       error: input.error,

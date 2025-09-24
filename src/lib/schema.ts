@@ -10,20 +10,29 @@ const evmAddressSchema = z.custom<Address>(
   },
 );
 
+const parseBoolean = z.preprocess((v) => {
+  if (typeof v === "string") {
+    const s = v.trim().toLowerCase();
+    if (["true", "1", "yes", "on"].includes(s)) return true; // allowed "true" strings
+    if (["false", "0", "no", "off", ""].includes(s)) return false; // allowed "false" strings
+  }
+  return v; // let z.boolean() handle booleans or fail on anything else
+}, z.boolean());
+
 export const WrapEthSchema = z.object({
   evmAddress: evmAddressSchema,
-  chainId: z.number(),
+  chainId: z.coerce.number(),
   amount: z.coerce.number().positive(),
-  //   all: z.boolean(),
+  all: parseBoolean.optional(),
 });
 
 export type WrapEthInput = z.infer<typeof WrapEthSchema>;
 
 export const UnwrapEthSchema = z.object({
   evmAddress: evmAddressSchema,
-  chainId: z.number(),
+  chainId: z.coerce.number(),
   amount: z.coerce.number().positive(),
-  all: z.boolean().optional(),
+  all: parseBoolean.optional(),
 });
 
 export type UnwrapEthInput = z.infer<typeof UnwrapEthSchema>;
@@ -33,10 +42,17 @@ export type ValidationResult<T> =
   | { ok: false; error: object };
 
 export function validateQuery<T extends z.ZodType>(
-  params: URLSearchParams,
+  req: { url: string },
   schema: T,
 ): ValidationResult<z.infer<T>> {
+  console.log("Raw request", req.url);
+  if (req.url.startsWith("/?")) {
+    req.url = req.url.slice(2);
+  }
+  const params = new URLSearchParams(req.url);
+  console.log("params", params);
   const result = schema.safeParse(Object.fromEntries(params.entries()));
+  console.log("parsed query", result);
   if (!result.success) {
     return { ok: false as const, error: z.treeifyError(result.error) };
   }
