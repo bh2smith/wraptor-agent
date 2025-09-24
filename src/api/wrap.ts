@@ -10,8 +10,9 @@ import { validateQuery, WrapEthSchema, isInvalid } from "../lib/schema";
 const wrapHandler = Router();
 
 wrapHandler.get("/", async (req: Request, res: Response) => {
-  console.log("wrap/", req.url);
+  console.log("Raw Params", req.url);
   const input = validateQuery(new URLSearchParams(req.url), WrapEthSchema);
+  console.log("wrap/", input);
   if (isInvalid(input)) {
     res.status(400).json({
       error: input.error,

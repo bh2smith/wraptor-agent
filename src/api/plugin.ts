@@ -15,9 +15,22 @@ import {
   SignRequestSchema,
 } from "@bitte-ai/agent-sdk";
 
-const bitteConfig = JSON.parse(process.env.BITTE_CONFIG || "{}");
-
-const url = bitteConfig.url || "https://wraptor-agent.vercel.app";
+const {
+  VERCEL_ENV,
+  VERCEL_URL,
+  VERCEL_BRANCH_URL,
+  VERCEL_PROJECT_PRODUCTION_URL,
+} = process.env;
+const PLUGIN_URL = (() => {
+  switch (VERCEL_ENV) {
+    case "production":
+      return `https://${VERCEL_PROJECT_PRODUCTION_URL}`;
+    case "preview":
+      return `https://${VERCEL_BRANCH_URL || VERCEL_URL}`;
+    default:
+      return `http://localhost:${process.env.PORT || 3000}`;
+  }
+})();
 
 const manifest = {
   openapi: "3.0.0",
@@ -26,7 +39,7 @@ const manifest = {
     description: DESCRIPTION,
     version: "1.0.0",
   },
-  servers: [{ url }],
+  servers: [{ url: PLUGIN_URL }],
   "x-mb": {
     "account-id": "max-normal.near",
     assistant: {
@@ -34,7 +47,7 @@ const manifest = {
       description: DESCRIPTION,
       instructions: INSTRUCTIONS,
       tools: [{ type: "generate-evm-tx" }],
-      image: `${url}/${IMAGE}`,
+      image: `${PLUGIN_URL}/${IMAGE}`,
       categories: ["wrappin'"],
       chainIds: CHAIN_IDS,
     },
