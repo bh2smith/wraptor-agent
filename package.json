@@ -14,18 +14,18 @@
     "@bitte-ai/agent-sdk": "^0.4.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "viem": "^2.37.7",
-    "zod": "^4.1.11"
+    "viem": "^2.38.2",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.7.2",
     "biome": "^0.3.3",
     "concurrently": "^9.2.1",
     "make-agent": "0.4.1",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
